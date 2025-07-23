@@ -83,7 +83,7 @@ class AboutScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Text(
-            'This application provides real-time monitoring of petrol prices across Malaysia, following the official pricing structure set by the MMinistry of Finance.',
+            'This application provides real-time monitoring of petrol prices across Malaysia, following the official pricing structure set by the Ministry of Finance.',
             style: TextStyle(
               fontSize: 16,
               height: 1.5,
