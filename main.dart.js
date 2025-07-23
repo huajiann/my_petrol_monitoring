@@ -86962,7 +86962,7 @@ A.Xq.prototype={}
 A.tv.prototype={
 H(a){var s=null,r=this.c
 r=r==null?s:"GoException: "+r.a
-return A.v5(!0,A.iR(A.cI(A.a([B.V1,B.aN,A.by(r==null?"page not found":r,s,s,s,s,s,s),B.aN,new A.DV(new A.a5P(a),B.UZ,s)],t.p),B.N,B.ep,B.y),s,s),B.ah,!0)}}
+return A.v5(!0,A.iR(A.cI(A.a([B.V0,B.aN,A.by(r==null?"page not found":r,s,s,s,s,s,s),B.aN,new A.DV(new A.a5P(a),B.UY,s)],t.p),B.N,B.ep,B.y),s,s),B.ah,!0)}}
 A.a5P.prototype={
 $0(){return A.LJ(this.a).qx(0,"/",null)},
 $S:0}
@@ -87863,12 +87863,12 @@ case 1:return A.P(p,r)}})
 return A.R($async$mg,r)}}
 A.Iv.prototype={
 H(a){var s,r,q,p,o=this,n=null,m=A.jk(a),l=A.jk(a),k=A.c5(12),j=A.en(B.b9,1),i=t.p
-l=A.bz(n,A.cI(A.a([A.dT(A.a([A.bz(n,B.GG,B.l,n,n,new A.bk(A.M(B.c.aC(25.5),58,117,246),n,n,A.c5(8),n,n,B.E),n,n,n,B.bi,n),B.c2,B.FJ],i),B.N,B.x,B.y),B.aN,B.UU],i),B.a7,B.x,B.y),B.l,n,n,new A.bk(B.i,n,j,k,n,n,B.E),n,n,n,l,n)
+l=A.bz(n,A.cI(A.a([A.dT(A.a([A.bz(n,B.GG,B.l,n,n,new A.bk(A.M(B.c.aC(25.5),58,117,246),n,n,A.c5(8),n,n,B.E),n,n,n,B.bi,n),B.c2,B.FJ],i),B.N,B.x,B.y),B.aN,B.V3],i),B.a7,B.x,B.y),B.l,n,n,new A.bk(B.i,n,j,k,n,n,B.E),n,n,n,l,n)
 k=A.d8(n,A.BW(a),n)
 j=A.jk(a)
 s=A.c5(12)
 r=A.en(B.b9,1)
-j=A.bz(n,A.cI(A.a([B.UV,B.kM,o.Cm(B.ns,"Real-time Price Monitoring","Live tracking of RON95, RON97, and Diesel prices"),o.Cm(B.Gi,"Price Analytics","Historical data and trend analysis"),o.Cm(B.Gp,"Price Change Alerts","Notifications when prices change")],i),B.a7,B.x,B.y),B.l,n,n,new A.bk(B.i,n,r,s,n,n,B.E),n,n,n,j,n)
+j=A.bz(n,A.cI(A.a([B.UU,B.kM,o.Cm(B.ns,"Real-time Price Monitoring","Live tracking of RON95, RON97, and Diesel prices"),o.Cm(B.Gi,"Price Analytics","Historical data and trend analysis"),o.Cm(B.Gp,"Price Change Alerts","Notifications when prices change")],i),B.a7,B.x,B.y),B.l,n,n,new A.bk(B.i,n,r,s,n,n,B.E),n,n,n,j,n)
 s=A.d8(n,A.BW(a),n)
 r=A.jk(a)
 q=A.c5(12)
@@ -87877,7 +87877,7 @@ return A.Pu(new A.qw(new A.bL(m,A.cI(A.a([l,k,j,s,A.bz(n,A.cI(A.a([B.V9,B.kM,o.C
 Cm(a,b,c){var s=null,r=t.p
 return new A.bL(B.mW,A.dT(A.a([A.zJ(a,B.ay,s,24),B.hL,A.n6(A.cI(A.a([A.by(b,s,s,s,B.SN,s,s),A.by(c,s,s,s,B.zE,s,s)],r),B.a7,B.x,B.y))],r),B.N,B.x,B.y),s)},
 Cp(a,b,c){var s=null,r=A.d8(A.by(a,s,s,s,B.QS,s,s),s,120)
-return new A.bL(B.Fl,A.dT(A.a([r,B.UX,A.n6(A.pG(!1,s,!0,A.by(b,s,s,s,A.fN(s,s,B.ay,s,B.kQ,B.ay,s,s,s,s,s,13,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s),s,!0,s,s,s,s,s,s,s,s,s,new A.a0t(c),s,s,s,s))],t.p),B.N,B.x,B.y),s)}}
+return new A.bL(B.Fl,A.dT(A.a([r,B.UW,A.n6(A.pG(!1,s,!0,A.by(b,s,s,s,A.fN(s,s,B.ay,s,B.kQ,B.ay,s,s,s,s,s,13,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s),s,!0,s,s,s,s,s,s,s,s,s,new A.a0t(c),s,s,s,s))],t.p),B.N,B.x,B.y),s)}}
 A.a0t.prototype={
 $0(){return $.aIw().p0("open",[this.a])},
 $S:0}
@@ -87979,7 +87979,7 @@ r=A.M(d,244,67,54)
 q=A.c5(8)
 p=B.c.aC(76.5)
 o=A.en(A.M(p,244,67,54),1)
-s=A.n6(A.bz(i,A.cI(A.a([B.V2,B.kN,A.by("RM "+B.c.a4(2.05,2),i,i,i,B.TH,i,i),B.zI],c),B.N,B.x,B.y),B.l,i,i,new A.bk(r,i,o,q,i,i,B.E),i,i,i,s,i))
+s=A.n6(A.bz(i,A.cI(A.a([B.V1,B.kN,A.by("RM "+B.c.a4(2.05,2),i,i,i,B.TH,i,i),B.zI],c),B.N,B.x,B.y),B.l,i,i,new A.bk(r,i,o,q,i,i,B.E),i,i,i,s,i))
 q=A.jk(a)
 o=A.M(d,76,175,80)
 r=A.c5(8)
@@ -87989,7 +87989,7 @@ n.toString
 s=A.dT(A.a([s,B.c2,A.n6(A.bz(i,A.cI(A.a([A.by(A.uZ(n)===B.j2?"New Price":"New Price (coming on end of Sept 2025)",i,i,i,B.f_,i,i),B.kN,A.by("RM "+B.c.a4(1.99,2),i,i,i,B.Se,i,i),B.zI],c),B.N,B.x,B.y),B.l,i,i,new A.bk(o,i,p,r,i,i,B.E),i,i,i,q,i))],c),B.N,B.x,B.y)
 r=A.M(d,58,117,246)
 q=A.c5(8)
-f=A.bz(i,A.cI(A.a([B.V3,B.aN,s,B.aN,A.bz(i,A.dT(A.a([B.GJ,B.z9,A.by("You save RM "+B.c.a4(0.05999999999999983,2)+" per litre!",i,i,i,B.Sf,i,i)],c),B.N,B.x,B.y),B.l,i,i,new A.bk(r,i,i,q,i,i,B.E),i,i,i,B.bi,i)],c),B.a7,B.x,B.y),B.l,i,i,new A.bk(B.i,i,e,f,i,i,B.E),i,i,i,B.df,i)
+f=A.bz(i,A.cI(A.a([B.V2,B.aN,s,B.aN,A.bz(i,A.dT(A.a([B.GJ,B.z9,A.by("You save RM "+B.c.a4(0.05999999999999983,2)+" per litre!",i,i,i,B.Sf,i,i)],c),B.N,B.x,B.y),B.l,i,i,new A.bk(r,i,i,q,i,i,B.E),i,i,i,B.bi,i)],c),B.a7,B.x,B.y),B.l,i,i,new A.bk(B.i,i,e,f,i,i,B.E),i,i,i,B.df,i)
 e=A.d8(i,A.BW(a),i)
 q=A.jk(a)
 r=A.c5(12)
@@ -92297,18 +92297,18 @@ B.kT=new A.m(!0,B.a9,null,null,null,null,20,B.aS,null,null,null,null,null,null,n
 B.V8=new A.bU("Malaysia Petrol Price Monitor",null,B.kT,null,null,null,null,null,null)
 B.eT=new A.ed(null,4,null,null)
 B.f_=new A.m(!0,B.bG,null,null,null,null,14,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.V0=new A.bU("A comprehensive tool for monitoring petrol prices in Malaysia",null,B.f_,null,null,null,null,null,null)
-B.I9=A.a(s([B.V8,B.eT,B.V0]),t.p)
+B.V_=new A.bU("A comprehensive tool for monitoring petrol prices in Malaysia",null,B.f_,null,null,null,null,null,null)
+B.I9=A.a(s([B.V8,B.eT,B.V_]),t.p)
 B.E5=new A.mX(B.a5,B.x,B.y,B.a7,null,B.bs,null,B.I9,null)
 B.FJ=new A.pj(1,B.e5,B.E5,null)
-B.UW=new A.bU("Tools B",null,B.kT,null,null,null,null,null,null)
+B.UV=new A.bU("Tools B",null,B.kT,null,null,null,null,null,null)
 B.Vg=new A.bU("Configuration and settings tool",null,B.f_,null,null,null,null,null,null)
-B.Ik=A.a(s([B.UW,B.eT,B.Vg]),t.p)
+B.Ik=A.a(s([B.UV,B.eT,B.Vg]),t.p)
 B.E7=new A.mX(B.a5,B.x,B.y,B.a7,null,B.bs,null,B.Ik,null)
 B.FK=new A.pj(1,B.e5,B.E7,null)
 B.Va=new A.bU("RON95 Price Calculator",null,B.kT,null,null,null,null,null,null)
-B.UY=new A.bU("Calculate your petrol savings with new RON95 price",null,B.f_,null,null,null,null,null,null)
-B.IV=A.a(s([B.Va,B.eT,B.UY]),t.p)
+B.UX=new A.bU("Calculate your petrol savings with new RON95 price",null,B.f_,null,null,null,null,null,null)
+B.IV=A.a(s([B.Va,B.eT,B.UX]),t.p)
 B.E6=new A.mX(B.a5,B.x,B.y,B.a7,null,B.bs,null,B.IV,null)
 B.FL=new A.pj(1,B.e5,B.E6,null)
 B.FM=new A.z3(null,null,null,null,null,null,null,null,null,null,null)
@@ -94130,8 +94130,8 @@ B.Bb=new A.bk(B.ft,null,null,null,null,null,B.E)
 B.zB=new A.m(!0,B.a9,null,null,null,null,null,B.aS,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.V6=new A.bU("Period",null,B.zB,null,null,null,null,null,null)
 B.Ms=new A.bL(B.bi,B.V6,null)
-B.V_=new A.bU("Total Savings",null,B.zB,B.dB,null,null,null,null,null)
-B.Mr=new A.bL(B.bi,B.V_,null)
+B.UZ=new A.bU("Total Savings",null,B.zB,B.dB,null,null,null,null,null)
+B.Mr=new A.bL(B.bi,B.UZ,null)
 B.Im=A.a(s([B.Ms,B.Mr]),t.p)
 B.Q9=new A.hg(B.Bb,B.Im)
 B.Qa=new A.ahN("tap")
@@ -94479,17 +94479,17 @@ B.Ts=new A.m(!0,B.i,null,"Roboto",null,null,null,null,null,null,null,null,null,n
 B.US=new A.dk(B.T6,B.Uw,B.Ud,B.Ru,B.U5,B.T_,B.UA,B.S3,B.SE,B.TZ,B.Rl,B.Ue,B.U2,B.TU,B.Ts)
 B.zG=new A.bU("Home",null,null,null,null,null,null,null,null)
 B.UT=new A.bU("Back",null,null,null,null,null,null,null,null)
-B.zA=new A.m(!0,B.a9,null,null,null,null,16,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.UU=new A.bU("This application provides real-time monitoring of petrol prices across Malaysia, following the official pricing structure set by the MMinistry of Finance.",null,B.zA,null,null,null,null,null,null)
 B.eZ=new A.m(!0,B.a9,null,null,null,null,18,B.aS,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.UV=new A.bU("Key Features",null,B.eZ,null,null,null,null,null,null)
+B.UU=new A.bU("Key Features",null,B.eZ,null,null,null,null,null,null)
 B.T4=new A.m(!0,B.bG,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.UX=new A.bU(": ",null,B.T4,null,null,null,null,null,null)
+B.UW=new A.bU(": ",null,B.T4,null,null,null,null,null,null)
 B.Ti=new A.m(!0,B.i,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.UZ=new A.bU("Go to home page",null,B.Ti,null,null,null,null,null,null)
-B.V1=new A.bU("Page Not Found",null,B.f0,null,null,null,null,null,null)
-B.V2=new A.bU("Current Price",null,B.f_,null,null,null,null,null,null)
-B.V3=new A.bU("Price Comparison",null,B.eZ,null,null,null,null,null,null)
+B.UY=new A.bU("Go to home page",null,B.Ti,null,null,null,null,null,null)
+B.V0=new A.bU("Page Not Found",null,B.f0,null,null,null,null,null,null)
+B.V1=new A.bU("Current Price",null,B.f_,null,null,null,null,null,null)
+B.V2=new A.bU("Price Comparison",null,B.eZ,null,null,null,null,null,null)
+B.zA=new A.m(!0,B.a9,null,null,null,null,16,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
+B.V3=new A.bU("This application provides real-time monitoring of petrol prices across Malaysia, following the official pricing structure set by the Ministry of Finance.",null,B.zA,null,null,null,null,null,null)
 B.V4=new A.bU("Calculate Your Savings",null,B.eZ,null,null,null,null,null,null)
 B.V5=new A.bU("",null,null,null,null,null,null,null,null)
 B.zI=new A.bU("per litre",null,B.zE,null,null,null,null,null,null)
