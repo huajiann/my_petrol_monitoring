@@ -2,7 +2,7 @@
 
 A Flutter web application that monitors petrol prices in Malaysia, compliant with the Malaysia Government Design System.
 
-🌐 **Live Demo**: [https://yourusername.github.io/my_petrol_monitoring/](https://yourusername.github.io/my_petrol_monitoring/)
+🌐 **Live Demo**: [https:/huajiann.github.io/my_petrol_monitoring](https://huajiann.github.io/my_petrol_monitoring)
 
 ## Features
 
