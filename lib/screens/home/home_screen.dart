@@ -133,9 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 4),
         ResponsiveText(
-          provider.lastUpdated != null
-              ? 'Last updated: ${DateFormat('dd MMM yyyy, HH:mm').format(provider.lastUpdated!)}'
-              : 'No update information',
+          provider.latestDataDate != null
+              ? 'Data as of ${DateFormat('dd MMMM yyyy').format(provider.latestDataDate!)}'
+              : 'No data available',
           style: Theme.of(context).textTheme.bodyMedium,
           desktopSize: 14,
           tabletSize: 13,

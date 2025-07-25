@@ -66,9 +66,11 @@ class PetrolPriceData {
     required this.prices,
   });
 
-  double get currentPrice => prices.isNotEmpty ? prices.last.price : 0.0;
+  double get currentPrice => prices.isNotEmpty ? prices.first.price : 0.0;
 
-  PetrolPrice? get previousPrice => prices.length > 1 ? prices[prices.length - 2] : null;
+  PetrolPrice? get previousPrice {
+    return prices.length > 1 ? prices[1] : null;
+  }
 
   double get priceChange {
     if (previousPrice != null) {
@@ -77,6 +79,6 @@ class PetrolPriceData {
     return 0.0;
   }
 
-  bool get isIncreasing => priceChange < 0;
-  bool get isDecreasing => priceChange > 0;
+  bool get isIncreasing => priceChange > 0;
+  bool get isDecreasing => priceChange < 0;
 }

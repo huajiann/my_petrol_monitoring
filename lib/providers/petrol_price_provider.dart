@@ -15,6 +15,23 @@ class PetrolPriceProvider extends ChangeNotifier {
   String? get error => _error;
   DateTime? get lastUpdated => _lastUpdated;
 
+  /// Get the latest data date from the actual price data
+  DateTime? get latestDataDate {
+    DateTime? latestDate;
+
+    for (final priceData in _priceData.values) {
+      if (priceData.prices.isNotEmpty) {
+        // Since prices are ordered with most recent first
+        final dataDate = priceData.prices.first.date;
+        if (latestDate == null || dataDate.isAfter(latestDate)) {
+          latestDate = dataDate;
+        }
+      }
+    }
+
+    return latestDate;
+  }
+
   PetrolPriceProvider() {
     _initializeData();
   }

@@ -202,7 +202,7 @@ class AboutScreen extends StatelessWidget {
           _buildTechnicalItem('About Me', 'Github', url: 'https://huajiann.github.io/flutter-minimalist-cv'),
           const SizedBox(height: 12),
           const Text(
-            'Version 1.0.0',
+            'Version 1.0.1',
             style: TextStyle(
               fontSize: 12,
               color: MalaysiaTheme.textLight,
