@@ -63,14 +63,14 @@ class PriceChart extends StatelessWidget {
       verticalInterval: prices.length / 6,
       getDrawingHorizontalLine: (value) {
         return FlLine(
-          color: MalaysiaTheme.textLight.withOpacity(0.2),
+          color: MalaysiaTheme.textLight.withValues(alpha: 0.2),
           strokeWidth: 0.8,
           dashArray: [5, 5],
         );
       },
       getDrawingVerticalLine: (value) {
         return FlLine(
-          color: MalaysiaTheme.textLight.withOpacity(0.2),
+          color: MalaysiaTheme.textLight.withValues(alpha: 0.2),
           strokeWidth: 0.8,
           dashArray: [5, 5],
         );
@@ -99,7 +99,7 @@ class PriceChart extends StatelessWidget {
               final reversedIndex = prices.length - 1 - index;
               final date = prices[reversedIndex].date;
               return SideTitleWidget(
-                axisSide: meta.axisSide,
+                meta: meta,
                 child: Text(
                   DateFormat('MMM dd').format(date),
                   style: const TextStyle(
@@ -116,7 +116,7 @@ class PriceChart extends StatelessWidget {
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
-          interval: 0.1,
+          interval: 0.2,
           reservedSize: 50,
           getTitlesWidget: (double value, TitleMeta meta) {
             return Text(
@@ -136,7 +136,7 @@ class PriceChart extends StatelessWidget {
     return FlBorderData(
       show: true,
       border: Border.all(
-        color: MalaysiaTheme.textLight.withOpacity(0.3),
+        color: MalaysiaTheme.textLight.withValues(alpha: 0.3),
         width: 1,
       ),
     );
@@ -193,7 +193,7 @@ class PriceChart extends StatelessWidget {
       ),
       belowBarData: BarAreaData(
         show: true,
-        color: lineColor.withOpacity(0.1),
+        color: lineColor.withValues(alpha: 0.1),
       ),
     );
   }
@@ -202,8 +202,8 @@ class PriceChart extends StatelessWidget {
     return LineTouchData(
       enabled: true,
       touchTooltipData: LineTouchTooltipData(
-        tooltipBgColor: MalaysiaTheme.primaryBlue,
-        tooltipRoundedRadius: 8,
+        tooltipBorderRadius: BorderRadius.circular(8),
+        getTooltipColor: (touchedSpot) => MalaysiaTheme.primaryBlue,
         getTooltipItems: (touchedSpots) {
           return touchedSpots.map((LineBarSpot touchedSpot) {
             final index = touchedSpot.x.toInt();

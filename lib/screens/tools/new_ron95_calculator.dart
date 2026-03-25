@@ -70,7 +70,7 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: MalaysiaTheme.primaryBlue.withOpacity(0.1),
+                            color: MalaysiaTheme.primaryBlue.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -136,9 +136,9 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                           child: Container(
                             padding: ResponsiveHelper.getResponsivePadding(context),
                             decoration: BoxDecoration(
-                              color: Colors.red.withOpacity(0.1),
+                              color: Colors.red.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.red.withOpacity(0.3)),
+                              border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
                             ),
                             child: Column(
                               children: [
@@ -174,9 +174,9 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                           child: Container(
                             padding: ResponsiveHelper.getResponsivePadding(context),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.1),
+                              color: Colors.green.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.green.withOpacity(0.3)),
+                              border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
                             ),
                             child: Column(
                               children: [
@@ -213,7 +213,7 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: MalaysiaTheme.primaryBlue.withOpacity(0.1),
+                        color: MalaysiaTheme.primaryBlue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -280,7 +280,7 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                               isDense: true,
                               hintText: 'Enter amount',
                               hintStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: MalaysiaTheme.textDark.withOpacity(0.6),
+                                    color: MalaysiaTheme.textDark.withValues(alpha: 0.6),
                                   ),
                               prefixIcon: Padding(
                                 padding: const EdgeInsets.only(left: 8),
@@ -288,7 +288,7 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                                   'RM ',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         fontWeight: FontWeight.w900,
-                                        color: MalaysiaTheme.textDark.withOpacity(0.6),
+                                        color: MalaysiaTheme.textDark.withValues(alpha: 0.6),
                                       ),
                                 ),
                               ),
@@ -398,39 +398,37 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                               ),
                             ],
                           ),
-                          ...[1, 3, 6, 12, 24]
-                              .map((months) => TableRow(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(12),
-                                        child: Text(
-                                          '$months ${months == 1 ? 'month' : 'months'}',
-                                          style: const TextStyle(
-                                            color: MalaysiaTheme.textDark,
-                                          ),
-                                        ),
+                          ...[1, 3, 6, 12, 24].map((months) => TableRow(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Text(
+                                      '$months ${months == 1 ? 'month' : 'months'}',
+                                      style: const TextStyle(
+                                        color: MalaysiaTheme.textDark,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(12),
-                                        child: Text(
-                                          'RM ${(_monthlySavings * months).toStringAsFixed(2)}',
-                                          style: const TextStyle(
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Text(
+                                      'RM ${(_monthlySavings * months).toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    ],
-                                  ))
-                              .toList(),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
+                          color: Colors.green.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(

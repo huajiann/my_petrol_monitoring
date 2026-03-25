@@ -22,7 +22,7 @@ class PriceCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: type.color.withOpacity(0.1),
+        color: type.color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: MalaysiaTheme.dividerColor),
       ),
@@ -32,7 +32,7 @@ class PriceCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: isSelected ? Border.all(color: MalaysiaTheme.textDark.withOpacity(0.6), width: 2) : null,
+            border: isSelected ? Border.all(color: MalaysiaTheme.textDark.withValues(alpha: 0.6), width: 2) : null,
           ),
           padding: EdgeInsets.all(isMobile ? 12 : 16),
           child: isMobile ? _buildMobileLayout(context) : _buildDesktopLayout(context),
@@ -144,7 +144,7 @@ class PriceCard extends StatelessWidget {
         vertical: isCompact ? 3 : 4,
       ),
       decoration: BoxDecoration(
-        color: changeColor.withOpacity(0.1),
+        color: changeColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

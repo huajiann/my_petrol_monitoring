@@ -69,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildBanner(),
+                SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context)),
                 _buildHeader(context, provider),
                 SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context)),
                 _buildPriceCardsSection(context, provider),
@@ -78,6 +80,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBanner() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: MalaysiaTheme.ron95Yellow,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Text('ayoo'),
+        ],
       ),
     );
   }

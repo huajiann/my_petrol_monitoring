@@ -164,7 +164,7 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
             decoration: BoxDecoration(
               color: isSelected ? const Color(0xFFF4F4F5) : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
-              border: isSelected ? Border.all(color: Colors.white.withOpacity(0.3)) : null,
+              border: isSelected ? Border.all(color: Colors.white.withValues(alpha: 0.3)) : null,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -208,7 +208,7 @@ class CustomNavBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFF4F4F5) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: isSelected ? Border.all(color: Colors.white.withOpacity(0.3)) : null,
+          border: isSelected ? Border.all(color: Colors.white.withValues(alpha: 0.3)) : null,
         ),
         child: Text(
           label,

@@ -29,7 +29,7 @@ class MalaysiaTheme {
         primary: primaryBlue,
         secondary: secondaryBlue,
         surface: cardBackground,
-        background: backgroundGrey,
+        onSurface: backgroundGrey,
       ),
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: AppBarTheme(
@@ -43,7 +43,7 @@ class MalaysiaTheme {
           color: Colors.white,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cardBackground,
         elevation: 2,
         shadowColor: Colors.black26,
@@ -96,9 +96,14 @@ class MalaysiaTheme {
   }
 
   static MaterialColor _createMaterialColor(Color color) {
-    List strengths = <double>[.05];
+    List<double> strengths = <double>[.05];
     final swatch = <int, Color>{};
-    final int r = color.red, g = color.green, b = color.blue;
+
+    int to8Bit(double component) => (component * 255.0).round() & 0xff;
+
+    final int r = to8Bit(color.r);
+    final int g = to8Bit(color.g);
+    final int b = to8Bit(color.b);
 
     for (int i = 1; i < 10; i++) {
       strengths.add(0.1 * i);
@@ -112,6 +117,6 @@ class MalaysiaTheme {
         1,
       );
     }
-    return MaterialColor(color.value, swatch);
+    return MaterialColor(color.toARGB32(), swatch);
   }
 }

@@ -140,7 +140,7 @@ class NavigationSidebar extends StatelessWidget {
       ),
       selected: isSelected,
       selectedColor: MalaysiaTheme.primaryBlue,
-      selectedTileColor: MalaysiaTheme.primaryBlue.withOpacity(0.1),
+      selectedTileColor: MalaysiaTheme.primaryBlue.withValues(alpha: 0.1),
       onTap: () => onNavigate(route),
     );
   }
