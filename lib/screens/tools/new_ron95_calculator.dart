@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../../models/petrol_price.dart';
+import '../../providers/petrol_price_provider.dart';
 import '../../theme/malaysia_theme.dart';
 import '../../widgets/responsive_grid.dart';
 
@@ -12,13 +15,11 @@ class NewRon95Calculator extends StatefulWidget {
 
 class _NewRon95CalculatorState extends State<NewRon95Calculator> {
   final TextEditingController _pumpAmountController = TextEditingController();
-  final double currentPrice = 2.05;
-  final double newPrice = 1.99;
   double _monthlySavings = 0.0;
   bool _isCalculated = false;
   bool get isMobile => ResponsiveHelper.isMobile(context);
 
-  void _calculateSavings() {
+  void _calculateSavings(double currentPrice, double newPrice) {
     final pumpAmount = double.tryParse(_pumpAmountController.text) ?? 0.0;
     if (pumpAmount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,14 +30,12 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
       );
       return;
     }
-    if (pumpAmount > 0) {
-      final savingsPerLiter = currentPrice - newPrice;
-      final litersPerMonth = pumpAmount / currentPrice;
+    final savingsPerLiter = currentPrice - newPrice;
+    final litersPerMonth = pumpAmount / currentPrice;
+    setState(() {
       _monthlySavings = litersPerMonth * savingsPerLiter;
-      setState(() {
-        _isCalculated = true;
-      });
-    }
+      _isCalculated = true;
+    });
   }
 
   @override
@@ -47,6 +46,27 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<PetrolPriceProvider>(
+      builder: (context, provider, child) {
+        final priceData = provider.priceData;
+        final currentPrice = priceData[PetrolType.ron95]?.currentPrice ?? 0.0;
+        final newPrice = priceData[PetrolType.ron95Budi95]?.currentPrice ?? 0.0;
+
+        if (provider.isLoading && priceData.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return _buildContent(context, provider, currentPrice, newPrice);
+      },
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    PetrolPriceProvider provider,
+    double currentPrice,
+    double newPrice,
+  ) {
     return SingleChildScrollView(
       child: ResponsiveContainer(
         child: Padding(
@@ -102,6 +122,21 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                               ),
                             ],
                           ),
+                        ),
+                        IconButton(
+                          icon: provider.isLoading
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: MalaysiaTheme.primaryBlue,
+                                  ),
+                                )
+                              : const Icon(Icons.refresh, size: 18),
+                          onPressed: provider.isLoading ? null : provider.refreshPrices,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                         ),
                       ],
                     ),
@@ -181,7 +216,7 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                             child: Column(
                               children: [
                                 Text(
-                                  isMobile ? 'New Price' : 'New Price (coming on end of Sept 2025)',
+                                  isMobile ? 'New Price (Budi95)' : 'New Price (RON95 Budi Madani)',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: MalaysiaTheme.textLight,
@@ -316,7 +351,8 @@ class _NewRon95CalculatorState extends State<NewRon95Calculator> {
                         ),
                         const SizedBox(width: 16),
                         ElevatedButton(
-                          onPressed: _calculateSavings,
+                          onPressed:
+                              currentPrice > 0 && newPrice > 0 ? () => _calculateSavings(currentPrice, newPrice) : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: MalaysiaTheme.primaryBlue,
                             foregroundColor: Colors.white,

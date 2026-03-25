@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  PetrolType selectedType = PetrolType.ron95;
+  PetrolType? selectedType;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildBanner(),
-                SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context)),
                 _buildHeader(context, provider),
                 SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context)),
                 _buildPriceCardsSection(context, provider),
@@ -80,21 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildBanner() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: MalaysiaTheme.ron95Yellow,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Text('ayoo'),
-        ],
       ),
     );
   }
@@ -142,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ResponsiveText(
-          'Current Petrol Prices',
-          style: Theme.of(context).textTheme.titleLarge,
+          'Latest Petrol Prices',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
           desktopSize: 22,
           tabletSize: 20,
           mobileSize: 18,
@@ -151,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 4),
         ResponsiveText(
           provider.latestDataDate != null
-              ? 'Data as of ${DateFormat('dd MMMM yyyy').format(provider.latestDataDate!)}'
+              ? 'Effective at: ${DateFormat('dd MMMM yyyy').format(provider.latestDataDate!)}'
               : 'No data available',
           style: Theme.of(context).textTheme.bodyMedium,
           desktopSize: 14,
@@ -199,6 +182,12 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
+    final categories = [
+      (label: 'RON 95', types: [PetrolType.ron95, PetrolType.ron95Budi95]),
+      (label: 'RON 97', types: [PetrolType.ron97]),
+      (label: 'Diesel', types: [PetrolType.dieselPM, PetrolType.dieselEastMsia]),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -211,26 +200,60 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
         ),
         const SizedBox(height: 16),
-        ResponsiveGrid(
-          desktopColumns: 2,
-          tabletColumns: 2,
-          mobileColumns: 1,
-          spacing: isMobile ? 12 : 16,
-          runSpacing: isMobile ? 12 : 16,
-          children: priceData.entries
-              .map(
-                (entry) => PriceCard(
-                  type: entry.key,
-                  priceData: entry.value,
-                  isSelected: selectedType == entry.key,
-                  onTap: () {
-                    setState(() {
-                      selectedType = entry.key;
-                    });
-                  },
-                ),
-              )
-              .toList(),
+        ...categories.expand((category) {
+          final availableTypes = category.types.where((type) => priceData.containsKey(type)).toList();
+          if (availableTypes.isEmpty) return const <Widget>[];
+          return <Widget>[
+            _buildCategoryLabel(context, category.label, availableTypes.first.color),
+            const SizedBox(height: 8),
+            ResponsiveGrid(
+              desktopColumns: 2,
+              tabletColumns: 2,
+              mobileColumns: 1,
+              spacing: isMobile ? 12 : 16,
+              runSpacing: isMobile ? 12 : 16,
+              children: availableTypes
+                  .map(
+                    (type) => PriceCard(
+                      type: type,
+                      priceData: priceData[type],
+                      isSelected: selectedType == type,
+                      onTap: () {
+                        setState(() {
+                          selectedType = selectedType == type ? null : type;
+                        });
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+            SizedBox(height: isMobile ? 16 : 20),
+          ];
+        }),
+      ],
+    );
+  }
+
+  Widget _buildCategoryLabel(BuildContext context, String label, Color accentColor) {
+    final isMobile = MediaQuery.of(context).size.width <= 767;
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 18,
+          decoration: BoxDecoration(
+            color: accentColor,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: MalaysiaTheme.textDark,
+                fontSize: isMobile ? 13 : 15,
+              ),
         ),
       ],
     );
@@ -238,7 +261,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildChartSection(BuildContext context, PetrolPriceProvider provider) {
     final isMobile = MediaQuery.of(context).size.width <= 767;
-    final priceData = provider.priceData[selectedType];
+    final chartPrices = {
+      for (final e in provider.priceData.entries) e.key: e.value.prices,
+    };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,8 +288,8 @@ class _HomeScreenState extends State<HomeScreen> {
               border: Border.all(color: MalaysiaTheme.dividerColor),
             ),
             child: PriceChart(
-              prices: priceData?.prices ?? [],
-              petrolType: selectedType,
+              allPrices: chartPrices,
+              selectedType: selectedType,
             ),
           ),
         ),

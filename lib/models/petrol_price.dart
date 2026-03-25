@@ -35,6 +35,7 @@ class PetrolPrice {
 
 enum PetrolType {
   ron95('RON 95', 'Regular petrol with 95 octane rating', 'ron95'),
+  ron95Budi95('Budi Madani Ron 95 (BUDI95)', 'Budi Madani Ron 95', 'ron95_budi95'),
   ron97('RON 97', 'Premium petrol with 97 octane rating', 'ron97'),
   dieselPM('Diesel (Peninsular Malaysia)', 'Diesel fuel for vehicles', 'diesel'),
   dieselEastMsia('Diesel (Sabah, Sarawak & Labuan)', 'Diesel fuel for East Malaysia', 'diesel_eastmsia');
@@ -47,6 +48,7 @@ enum PetrolType {
   Color get color {
     switch (this) {
       case PetrolType.ron95:
+      case PetrolType.ron95Budi95:
         return MalaysiaTheme.ron95Yellow;
       case PetrolType.ron97:
         return MalaysiaTheme.ron97Green;
