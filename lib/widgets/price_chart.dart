@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../models/petrol_price.dart';
+import '../models/prediction.dart';
 import '../theme/malaysia_theme.dart';
 
 class PriceChart extends StatelessWidget {
   final Map<PetrolType, List<PetrolPrice>> allPrices;
   final PetrolType? selectedType;
+  final PredictionData? prediction;
 
   const PriceChart({
     super.key,
     required this.allPrices,
     this.selectedType,
+    this.prediction,
   });
 
   Map<PetrolType, List<PetrolPrice>> get _visiblePrices {
@@ -28,6 +31,11 @@ class PriceChart extends StatelessWidget {
       for (final p in prices) {
         dateSet.add(DateFormat('yyyy-MM-dd').format(p.date));
       }
+    }
+    // If prediction is enabled, add a prediction date (7 days after the last date)
+    if (prediction != null) {
+      final predDate = prediction!.date.add(const Duration(days: 7));
+      dateSet.add(DateFormat('yyyy-MM-dd').format(predDate));
     }
     final dates = dateSet.map((s) => DateTime.parse(s)).toList();
     dates.sort();
@@ -76,6 +84,28 @@ class PriceChart extends StatelessWidget {
     };
     final types = visible.keys.toList();
 
+    final mainBars = visible.entries.map((e) => _buildLineBarData(e.key, e.value, dateIndex)).toList();
+    final predictionBars = <LineChartBarData>[];
+    final betweenBarsData = <BetweenBarsData>[];
+    if (prediction != null) {
+      for (final type in visible.keys) {
+        final fuelPred = prediction!.getPrediction(type);
+        if (fuelPred == null) continue;
+        final result = _buildPredictionLineBars(type, visible[type]!, fuelPred, dateIndex);
+        if (result != null) {
+          final baseIndex = mainBars.length + predictionBars.length;
+          predictionBars.add(result.predLine);
+          predictionBars.add(result.upperLine);
+          predictionBars.add(result.lowerLine);
+          betweenBarsData.add(BetweenBarsData(
+            fromIndex: baseIndex + 1, // upper line
+            toIndex: baseIndex + 2, // lower line
+            color: _colorForType(type).withValues(alpha: 0.12),
+          ));
+        }
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,7 +121,11 @@ class PriceChart extends StatelessWidget {
               maxX: (dates.length - 1).toDouble(),
               minY: _getMinY(visible),
               maxY: _getMaxY(visible),
-              lineBarsData: visible.entries.map((e) => _buildLineBarData(e.key, e.value, dateIndex)).toList(),
+              betweenBarsData: betweenBarsData,
+              lineBarsData: [
+                ...mainBars,
+                ...predictionBars,
+              ],
               lineTouchData: _buildLineTouchData(dates, types),
             ),
           ),
@@ -104,30 +138,61 @@ class PriceChart extends StatelessWidget {
     return Wrap(
       spacing: 16,
       runSpacing: 8,
-      children: visible.keys.map((type) {
-        final color = _colorForType(type);
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 16,
-              height: 3,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(2),
+      children: [
+        ...visible.keys.map((type) {
+          final color = _colorForType(type);
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 16,
+                height: 3,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              type.displayName,
-              style: const TextStyle(
-                fontSize: 11,
-                color: MalaysiaTheme.textLight,
+              const SizedBox(width: 6),
+              Text(
+                type.displayName,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: MalaysiaTheme.textLight,
+                ),
               ),
-            ),
-          ],
-        );
-      }).toList(),
+            ],
+          );
+        }),
+        if (prediction != null)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 16,
+                height: 3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: MalaysiaTheme.primaryBlue.withValues(alpha: 0.6),
+                      width: 2,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Text(
+                'Predicted',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: MalaysiaTheme.primaryBlue,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+      ],
     );
   }
 
@@ -222,6 +287,14 @@ class PriceChart extends StatelessWidget {
         if (min == null || p.price < min) min = p.price;
       }
     }
+    if (prediction != null) {
+      for (final type in visible.keys) {
+        final fuelPred = prediction!.getPrediction(type);
+        if (fuelPred != null && (min == null || fuelPred.lower < min)) {
+          min = fuelPred.lower;
+        }
+      }
+    }
     return (min ?? 0) - 0.1;
   }
 
@@ -230,6 +303,14 @@ class PriceChart extends StatelessWidget {
     for (final prices in visible.values) {
       for (final p in prices) {
         if (max == null || p.price > max) max = p.price;
+      }
+    }
+    if (prediction != null) {
+      for (final type in visible.keys) {
+        final fuelPred = prediction!.getPrediction(type);
+        if (fuelPred != null && (max == null || fuelPred.upper > max)) {
+          max = fuelPred.upper;
+        }
       }
     }
     return (max ?? 0) + 0.1;
@@ -250,7 +331,7 @@ class PriceChart extends StatelessWidget {
     spots.sort((a, b) => a.x.compareTo(b.x));
     return LineChartBarData(
       spots: spots,
-      isCurved: true,
+      isCurved: false,
       color: color,
       barWidth: 3,
       isStrokeCapRound: true,
@@ -263,11 +344,110 @@ class PriceChart extends StatelessWidget {
           strokeColor: Colors.white,
         ),
       ),
-      belowBarData: BarAreaData(
-        show: true,
-        color: color.withValues(alpha: 0.08),
-      ),
+      belowBarData: BarAreaData(show: false),
     );
+  }
+
+  ({LineChartBarData predLine, LineChartBarData upperLine, LineChartBarData lowerLine})? _buildPredictionLineBars(
+    PetrolType type,
+    List<PetrolPrice> prices,
+    FuelPrediction fuelPred,
+    Map<String, int> dateIndex,
+  ) {
+    final color = _colorForType(type);
+    final predDateStr = DateFormat('yyyy-MM-dd').format(
+      prediction!.date.add(const Duration(days: 7)),
+    );
+    final predXi = dateIndex[predDateStr];
+    if (predXi == null) return null;
+
+    // Find the last actual data point for this type
+    FlSpot? lastActual;
+    for (final p in prices) {
+      final key = DateFormat('yyyy-MM-dd').format(p.date);
+      final xi = dateIndex[key];
+      if (xi != null) {
+        if (lastActual == null || xi > lastActual.x) {
+          lastActual = FlSpot(xi.toDouble(), p.price);
+        }
+      }
+    }
+    if (lastActual == null) return null;
+
+    final predX = predXi.toDouble();
+    final noDotPainter = FlDotCirclePainter(
+      radius: 0,
+      color: Colors.transparent,
+      strokeWidth: 0,
+      strokeColor: Colors.transparent,
+    );
+
+    // Dashed line from last actual point to predicted point
+    final predLine = LineChartBarData(
+      spots: [lastActual, FlSpot(predX, fuelPred.predicted)],
+      isCurved: false,
+      color: color.withValues(alpha: 0.7),
+      barWidth: 2,
+      isStrokeCapRound: true,
+      dashArray: [6, 4],
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, percent, barData, index) {
+          if (index == 0) return noDotPainter;
+          return FlDotCirclePainter(
+            radius: 5,
+            color: color,
+            strokeWidth: 2,
+            strokeColor: Colors.white,
+          );
+        },
+      ),
+      belowBarData: BarAreaData(show: false),
+    );
+
+    // Upper bound line: from last actual price → upper prediction
+    final upperLine = LineChartBarData(
+      spots: [lastActual, FlSpot(predX, fuelPred.upper)],
+      isCurved: false,
+      color: Colors.transparent,
+      barWidth: 0,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, percent, barData, index) {
+          if (index == 0) return noDotPainter;
+          return FlDotCirclePainter(
+            radius: 3,
+            color: color.withValues(alpha: 0.4),
+            strokeWidth: 1,
+            strokeColor: color.withValues(alpha: 0.3),
+          );
+        },
+      ),
+      belowBarData: BarAreaData(show: false),
+    );
+
+    // Lower bound line: from last actual price → lower prediction
+    final lowerLine = LineChartBarData(
+      spots: [lastActual, FlSpot(predX, fuelPred.lower)],
+      isCurved: false,
+      color: Colors.transparent,
+      barWidth: 0,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (spot, percent, barData, index) {
+          if (index == 0) return noDotPainter;
+          return FlDotCirclePainter(
+            radius: 3,
+            color: color.withValues(alpha: 0.4),
+            strokeWidth: 1,
+            strokeColor: color.withValues(alpha: 0.3),
+          );
+        },
+      ),
+      belowBarData: BarAreaData(show: false),
+    );
+
+    return (predLine: predLine, upperLine: upperLine, lowerLine: lowerLine);
   }
 
   LineTouchData _buildLineTouchData(

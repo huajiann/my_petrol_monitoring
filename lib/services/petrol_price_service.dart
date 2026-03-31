@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import '../models/petrol_price.dart';
+import '../models/prediction.dart';
 
 class PetrolPriceService {
   static const String _pricesCacheKey = 'cached_prices';
@@ -205,5 +206,24 @@ class PetrolPriceService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_pricesCacheKey);
     await prefs.remove(_lastUpdateKey);
+  }
+
+  Future<PredictionData?> fetchPrediction() async {
+    try {
+      final querySnapshot =
+          await _firestore.collection('predictions').orderBy(FieldPath.documentId, descending: true).limit(1).get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return null;
+      }
+
+      final doc = querySnapshot.docs.first;
+      final data = doc.data();
+      final dateStr = data['date'] as String? ?? doc.id;
+
+      return PredictionData.fromJson(data, dateStr);
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/petrol_price.dart';
+import '../models/prediction.dart';
 import '../theme/malaysia_theme.dart';
 
-class PriceCard extends StatelessWidget {
+class PriceCard extends StatefulWidget {
   final PetrolType type;
   final PetrolPriceData? priceData;
   final bool isSelected;
   final VoidCallback onTap;
+  final FuelPrediction? prediction;
 
   const PriceCard({
     super.key,
@@ -14,7 +16,52 @@ class PriceCard extends StatelessWidget {
     this.priceData,
     this.isSelected = false,
     required this.onTap,
+    this.prediction,
   });
+
+  @override
+  State<PriceCard> createState() => _PriceCardState();
+}
+
+class _PriceCardState extends State<PriceCard> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 350),
+      vsync: this,
+    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+
+    if (widget.prediction != null) {
+      _controller.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant PriceCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.prediction != null && oldWidget.prediction == null) {
+      _controller.forward();
+    } else if (widget.prediction == null && oldWidget.prediction != null) {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  PetrolType get type => widget.type;
+  PetrolPriceData? get priceData => widget.priceData;
+  bool get isSelected => widget.isSelected;
+  VoidCallback get onTap => widget.onTap;
+  FuelPrediction? get prediction => widget.prediction;
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +94,38 @@ class PriceCard extends StatelessWidget {
     final isIncreasing = priceData?.isIncreasing ?? false;
     final isDecreasing = priceData?.isDecreasing ?? false;
 
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                type.displayName,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    type.displayName,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'RM ${currentPrice.toStringAsFixed(2)} / litre',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 24,
+                          color: MalaysiaTheme.textDark,
+                        ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                'RM ${currentPrice.toStringAsFixed(2)} / litre',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 24,
-                      color: MalaysiaTheme.textDark,
-                    ),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 16),
+            _buildPriceChangeIndicator(priceChange, isIncreasing, isDecreasing, false),
+          ],
         ),
-        const SizedBox(width: 16),
-        _buildPriceChangeIndicator(priceChange, isIncreasing, isDecreasing, false),
+        _buildAnimatedPredictionRow(context, false),
       ],
     );
   }
@@ -107,7 +160,68 @@ class PriceCard extends StatelessWidget {
             _buildPriceChangeIndicator(priceChange, isIncreasing, isDecreasing, true),
           ],
         ),
+        _buildAnimatedPredictionRow(context, true),
       ],
+    );
+  }
+
+  Widget _buildAnimatedPredictionRow(BuildContext context, bool isCompact) {
+    return SizeTransition(
+      sizeFactor: _fadeAnimation,
+      axisAlignment: -1.0,
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: prediction != null ? _buildPredictionRow(context, isCompact) : const SizedBox.shrink(),
+      ),
+    );
+  }
+
+  Widget _buildPredictionRow(BuildContext context, bool isCompact) {
+    final pred = prediction!;
+    return Container(
+      margin: EdgeInsets.only(top: isCompact ? 8 : 10),
+      padding: EdgeInsets.all(isCompact ? 8 : 10),
+      decoration: BoxDecoration(
+        color: MalaysiaTheme.primaryBlue.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: MalaysiaTheme.primaryBlue.withValues(alpha: 0.2),
+          style: BorderStyle.solid,
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.auto_graph,
+            size: isCompact ? 12 : 14,
+            color: MalaysiaTheme.primaryBlue,
+          ),
+          SizedBox(width: isCompact ? 6 : 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Predicted: RM ${pred.predicted.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: isCompact ? 11 : 13,
+                    fontWeight: FontWeight.w700,
+                    color: MalaysiaTheme.primaryBlue,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Range: RM ${pred.lower.toStringAsFixed(2)} – RM ${pred.upper.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: isCompact ? 9 : 11,
+                    color: MalaysiaTheme.textLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

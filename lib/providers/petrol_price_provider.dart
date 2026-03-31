@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/petrol_price.dart';
+import '../models/prediction.dart';
 import '../services/petrol_price_service.dart';
 
 class PetrolPriceProvider extends ChangeNotifier {
@@ -10,10 +11,20 @@ class PetrolPriceProvider extends ChangeNotifier {
   String? _error;
   DateTime? _lastUpdated;
 
+  PredictionData? _prediction;
+  bool _showPrediction = false;
+  bool _isPredictionLoading = false;
+  String? _predictionError;
+
   Map<PetrolType, PetrolPriceData> get priceData => _priceData;
   bool get isLoading => _isLoading;
   String? get error => _error;
   DateTime? get lastUpdated => _lastUpdated;
+
+  PredictionData? get prediction => _prediction;
+  bool get showPrediction => _showPrediction;
+  bool get isPredictionLoading => _isPredictionLoading;
+  String? get predictionError => _predictionError;
 
   /// Get the latest data date from the actual price data
   DateTime? get latestDataDate {
@@ -98,6 +109,41 @@ class PetrolPriceProvider extends ChangeNotifier {
 
   void clearError() {
     _error = null;
+    notifyListeners();
+  }
+
+  Future<void> togglePrediction() async {
+    if (!_showPrediction) {
+      if (_prediction == null) {
+        await fetchPrediction();
+        if (_prediction == null) {
+          return;
+        }
+      }
+      _showPrediction = true;
+    } else {
+      _showPrediction = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchPrediction() async {
+    _isPredictionLoading = true;
+    _predictionError = null;
+    notifyListeners();
+
+    try {
+      final data = await _service.fetchPrediction();
+      if (data == null) {
+        _predictionError = 'No prediction data available';
+      } else {
+        _prediction = data;
+      }
+    } catch (e) {
+      _predictionError = 'Failed to fetch prediction: $e';
+    }
+
+    _isPredictionLoading = false;
     notifyListeners();
   }
 }

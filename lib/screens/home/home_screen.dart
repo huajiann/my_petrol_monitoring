@@ -6,6 +6,7 @@ import '../../models/petrol_price.dart';
 import '../../widgets/price_card.dart';
 import '../../widgets/price_chart.dart';
 import '../../widgets/responsive_grid.dart';
+import '../../widgets/shake_widget.dart';
 import '../../theme/malaysia_theme.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -74,6 +75,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildPriceCardsSection(context, provider),
                 SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context)),
                 _buildChartSection(context, provider),
+                if (provider.showPrediction) ...[
+                  SizedBox(height: 8),
+                  Text(
+                    '*Prediction data is based on historical trends and may not reflect real-time market conditions.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: MalaysiaTheme.textDark,
+                          fontSize: 12,
+                        ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -98,7 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildHeaderContent(context, provider),
                 const SizedBox(height: 16),
-                _buildRefreshButton(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _buildPredictionToggle(provider),
+                    const SizedBox(width: 8),
+                    _buildRefreshButton(),
+                  ],
+                ),
               ],
             )
           : Row(
@@ -114,6 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 12),
                 Expanded(child: _buildHeaderContent(context, provider)),
                 const SizedBox(width: 16),
+                _buildPredictionToggle(provider),
+                const SizedBox(width: 8),
                 _buildRefreshButton(),
               ],
             ),
@@ -172,6 +193,78 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildPredictionToggle(PetrolPriceProvider provider) {
+    final isActive = provider.showPrediction;
+    final isLoading = provider.isPredictionLoading;
+
+    return ShakeWidget(
+      autoShake: !isActive,
+      autoShakeDelay: const Duration(milliseconds: 500),
+      shakeCount: 4,
+      duration: const Duration(milliseconds: 600),
+      repeatInterval: !isActive ? const Duration(seconds: 15) : null,
+      child: Tooltip(
+        message: isActive ? 'Hide predictions' : 'Show predictions',
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: isLoading
+              ? null
+              : () async {
+                  await provider.togglePrediction();
+                  if (mounted && provider.predictionError != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(provider.predictionError!),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: isActive ? MalaysiaTheme.primaryBlue.withValues(alpha: 0.1) : Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                width: 2,
+                color: isActive ? MalaysiaTheme.primaryBlue : MalaysiaTheme.dividerColor,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isLoading)
+                  const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: MalaysiaTheme.primaryBlue,
+                    ),
+                  )
+                else
+                  Icon(
+                    Icons.auto_graph,
+                    size: 14,
+                    color: isActive ? MalaysiaTheme.primaryBlue : MalaysiaTheme.textLight,
+                  ),
+                const SizedBox(width: 4),
+                Text(
+                  'Prediction',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                    color: isActive ? MalaysiaTheme.primaryBlue : MalaysiaTheme.textLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildPriceCardsSection(BuildContext context, PetrolPriceProvider provider) {
     final priceData = provider.priceData;
     final isMobile = MediaQuery.of(context).size.width <= 767;
@@ -218,6 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       type: type,
                       priceData: priceData[type],
                       isSelected: selectedType == type,
+                      prediction: provider.showPrediction ? provider.prediction?.getPrediction(type) : null,
                       onTap: () {
                         setState(() {
                           selectedType = selectedType == type ? null : type;
@@ -290,6 +384,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: PriceChart(
               allPrices: chartPrices,
               selectedType: selectedType,
+              prediction: provider.showPrediction ? provider.prediction : null,
             ),
           ),
         ),
